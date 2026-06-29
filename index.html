@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+  <title>Nana's Cleaning Service – Isis Noriega</title>
+  <meta name="description" content="Commercial & Residential Cleaning. Isis Noriega – Supervisor."/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --navy-dark:  #0d1b33;
+      --navy-main:  #142a4d;
+      --navy-mid:   #1f3d70;
+      --navy-light: #2e5598;
+      --green:      #2fa84f;
+      --green-dark: #1f7d39;
+      --gray-dark:   #2b2b2b;
+      --gray-mid:    #4a4a4a;
+      --gray-light:  #f7f9f8;
+      --white:       #ffffff;
+    }
+    html, body {
+      min-height: 100dvh;
+      font-family: 'DM Sans', sans-serif;
+      background: var(--gray-light);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem 1rem;
+      overflow-y: auto;
+    }
+    .card {
+      width: 100%;
+      max-width: 420px;
+      background: var(--white);
+      border-radius: 24px;
+      overflow-x: hidden;
+      overflow-y: auto;
+      max-height: 100dvh;
+      box-shadow: 0 24px 60px rgba(0,0,0,.13), 0 4px 16px rgba(0,0,0,.07);
+      animation: rise .7s cubic-bezier(.22,1,.36,1) both;
+    }
+    @keyframes rise {
+      from { opacity: 0; transform: translateY(32px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* SLIDER */
+    .slider {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16/9;
+      overflow: hidden;
+    }
+    .slide {
+      position: absolute;
+      inset: 0;
+      background-size: cover;
+      background-position: center;
+      opacity: 0;
+      transition: opacity .7s ease;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: .6rem;
+      padding: 1.5rem;
+    }
+    .slide.active { opacity: 1; }
+    .slide-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(13,27,51,.35), rgba(13,27,51,.65));
+    }
+    .slide-content {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: .5rem;
+      text-align: center;
+    }
+    .slide-logo {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: .2rem;
+    }
+    .slide-logo .brand-name {
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 700;
+      font-size: 1.3rem;
+      letter-spacing: .03em;
+      color: var(--navy-dark);
+    }
+    .slide-logo .brand-name span { color: var(--green); }
+    .slide-logo .brand-sub {
+      font-size: .68rem;
+      font-weight: 500;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--gray-mid);
+    }
+    .slide:not(:first-child) .slide-logo .brand-name { color: var(--white); }
+    .slide:not(:first-child) .slide-logo .brand-sub { color: rgba(255,255,255,.85); }
+    .slide-title {
+      color: var(--white);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 1.15rem;
+      font-weight: 700;
+      text-shadow: 0 1px 4px rgba(0,0,0,.4);
+      letter-spacing: .01em;
+    }
+    .slider-dots {
+      position: absolute;
+      bottom: .75rem;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: .4rem;
+      z-index: 2;
+      background: rgba(0,0,0,.18);
+      padding: .3rem .5rem;
+      border-radius: 20px;
+    }
+    .dot {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: rgba(255,255,255,.5);
+      cursor: pointer;
+      transition: background .3s;
+    }
+    .dot.active { background: var(--green); }
+
+    /* PERSON STRIP */
+    .person-strip {
+      background: var(--navy-dark);
+      padding: .9rem 2rem;
+      text-align: center;
+      border-bottom: 3px solid var(--green);
+    }
+    .person-name { color: var(--white); font-weight: 700; font-size: 1.08rem; }
+    .person-title { color: rgba(255,255,255,.85); font-size: .88rem; font-weight: 500; }
+
+    /* TOAST */
+    .copy-toast {
+      display: none;
+      text-align: center;
+      background: var(--navy-dark);
+      color: var(--white);
+      font-size: .78rem;
+      padding: .4rem;
+      letter-spacing: .04em;
+    }
+    .copy-toast.show { display: block; }
+
+    /* TAGLINE */
+    .tagline {
+      padding: 1.4rem 2rem 1rem;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: var(--navy-dark);
+      background: var(--white);
+      line-height: 1.4;
+      text-align: center;
+    }
+    .tagline-loc {
+      display: block;
+      margin-top: .3rem;
+      font-size: .8rem;
+      font-weight: 500;
+      color: var(--green-dark);
+      letter-spacing: .03em;
+    }
+
+    /* CONTACT */
+    .contact-section {
+      padding: .6rem 2rem 1.2rem;
+      display: flex;
+      flex-direction: column;
+      gap: .7rem;
+      background: var(--white);
+    }
+    .contact-btn {
+      display: flex;
+      align-items: center;
+      gap: .8rem;
+      padding: .8rem 1rem;
+      border-radius: 14px;
+      text-decoration: none;
+      font-size: .88rem;
+      font-weight: 500;
+      color: var(--gray-dark);
+      background: var(--gray-light);
+      border: 1px solid #ebebeb;
+      transition: all .18s;
+      cursor: pointer;
+    }
+    .contact-btn:hover {
+      background: #eaf7ee;
+      border-color: var(--green);
+      color: var(--navy-dark);
+      transform: translateX(3px);
+    }
+    .contact-btn .icon {
+      width: 44px; height: 44px;
+      border-radius: 50%;
+      background: var(--navy-main);
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .contact-btn .label { flex: 1; }
+    .contact-btn .label small { display: block; font-size: .7rem; color: #888; font-weight: 400; }
+    .contact-btn .arrow { color: var(--green); font-size: .9rem; }
+
+    /* SAVE & SHARE BUTTONS */
+    .btn-area {
+      padding: .2rem 2rem 1.1rem;
+      display: flex;
+      flex-direction: column;
+      gap: .7rem;
+    }
+    .save-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: .5rem;
+      text-align: center;
+      background: linear-gradient(135deg, var(--green), var(--green-dark));
+      color: var(--white);
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 600;
+      font-size: .9rem;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      padding: .95rem;
+      border-radius: 14px;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 6px 20px rgba(47,168,79,.35);
+      transition: all .2s;
+      text-decoration: none;
+    }
+    .save-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 28px rgba(47,168,79,.45); }
+    .outline-share-btn {
+      display: block;
+      text-align: center;
+      background: var(--white);
+      color: var(--navy-main);
+      border: 2px solid var(--navy-main);
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 600;
+      font-size: .9rem;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      padding: .9rem;
+      border-radius: 14px;
+      cursor: pointer;
+      transition: all .2s;
+    }
+    .outline-share-btn:hover { background: var(--gray-light); }
+
+    /* FOOTER */
+    .footer {
+      text-align: center;
+      padding: 1rem 2rem 1.5rem;
+      border-top: 1px solid #ebebeb;
+      font-size: .72rem;
+      color: #aaa;
+    }
+
+    @media (max-width: 480px) {
+      html, body { padding: 1rem 1rem; }
+      .card { border-radius: 16px; }
+      .person-strip { padding: .8rem 1.2rem; }
+      .tagline { padding: 1.1rem 1.2rem .8rem; }
+      .contact-section { padding: .5rem 1.2rem 1rem; }
+      .btn-area { padding: .2rem 1.2rem 1rem; }
+      .footer { padding: .9rem 1.2rem 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="card">
+
+  <!-- SLIDER -->
+  <div class="slider" id="slider">
+    <div class="slide active" style="background:#ffffff;">
+      <div class="slide-content">
+        <div class="slide-logo">
+          <div class="brand-name">NANA'S <span>CLEANING</span></div>
+          <div class="brand-sub">Service LLC</div>
+        </div>
+      </div>
+    </div>
+    <div class="slide" style="background-image:url('images/commercial-cleaning.jpg')">
+      <div class="slide-overlay"></div>
+      <div class="slide-content">
+        <div class="slide-logo">
+          <div class="brand-name">NANA'S <span>CLEANING</span></div>
+        </div>
+        <div class="slide-title">Commercial Cleaning</div>
+      </div>
+    </div>
+    <div class="slide" style="background-image:url('images/office-cleaning.jpg')">
+      <div class="slide-overlay"></div>
+      <div class="slide-content">
+        <div class="slide-logo">
+          <div class="brand-name">NANA'S <span>CLEANING</span></div>
+        </div>
+        <div class="slide-title">Office Cleaning</div>
+      </div>
+    </div>
+    <div class="slide" style="background-image:url('images/floor-care.jpg')">
+      <div class="slide-overlay"></div>
+      <div class="slide-content">
+        <div class="slide-logo">
+          <div class="brand-name">NANA'S <span>CLEANING</span></div>
+        </div>
+        <div class="slide-title">Floor Care &amp; Deep Cleaning</div>
+      </div>
+    </div>
+    <div class="slide" style="background-image:url('images/post-construction-cleaning.jpg')">
+      <div class="slide-overlay"></div>
+      <div class="slide-content">
+        <div class="slide-logo">
+          <div class="brand-name">NANA'S <span>CLEANING</span></div>
+        </div>
+        <div class="slide-title">Post-Construction Cleaning</div>
+      </div>
+    </div>
+    <div class="slide" style="background-image:url('images/schools-banks-government.jpg')">
+      <div class="slide-overlay"></div>
+      <div class="slide-content">
+        <div class="slide-logo">
+          <div class="brand-name">NANA'S <span>CLEANING</span></div>
+        </div>
+        <div class="slide-title">Schools, Banks &amp; Government Buildings</div>
+      </div>
+    </div>
+    <div class="slider-dots" id="dots">
+      <div class="dot active" onclick="goTo(0)"></div>
+      <div class="dot" onclick="goTo(1)"></div>
+      <div class="dot" onclick="goTo(2)"></div>
+      <div class="dot" onclick="goTo(3)"></div>
+      <div class="dot" onclick="goTo(4)"></div>
+      <div class="dot" onclick="goTo(5)"></div>
+    </div>
+  </div>
+
+  <!-- PERSON -->
+  <div class="person-strip">
+    <div class="person-name">Isis Noriega</div>
+    <div class="person-title">Supervisor</div>
+  </div>
+
+  <div class="copy-toast" id="toast">🔗 Link copied!</div>
+
+  <!-- TAGLINE -->
+  <div class="tagline">
+    Commercial &amp; Residential Cleaning
+    <span class="tagline-loc">Greeley, Colorado</span>
+  </div>
+
+  <!-- CONTACT -->
+  <div class="contact-section">
+    <a class="contact-btn" href="tel:+15054898050">
+      <div class="icon">
+        <svg viewBox="0 0 24 24" fill="white" width="20" height="20"><path d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1-9.4 0-17-7.6-17-17 0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.3 0 .7-.2 1L6.6 10.8z"/></svg>
+      </div>
+      <div class="label">(505) 489-8050<small>Call or text</small></div>
+      <span class="arrow">›</span>
+    </a>
+    <a class="contact-btn" href="sms:+15054898050">
+      <div class="icon">
+        <svg viewBox="0 0 24 24" fill="white" width="20" height="20"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H6l-2 2V4h16v12z"/></svg>
+      </div>
+      <div class="label">Send a Text<small>SMS</small></div>
+      <span class="arrow">›</span>
+    </a>
+    <a class="contact-btn" href="mailto:isis@nanasclean.com">
+      <div class="icon">
+        <svg viewBox="0 0 24 24" fill="white" width="20" height="20"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+      </div>
+      <div class="label">isis@nanasclean.com<small>Email us</small></div>
+      <span class="arrow">›</span>
+    </a>
+    <a class="contact-btn" href="https://nanasclean.com" target="_blank">
+      <div class="icon">
+        <svg viewBox="0 0 24 24" fill="white" width="20" height="20"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
+      </div>
+      <div class="label">nanasclean.com<small>Visit our website</small></div>
+      <span class="arrow">›</span>
+    </a>
+  </div>
+
+  <!-- SAVE & SHARE -->
+  <div class="btn-area">
+    <a class="save-btn" href="#" onclick="saveContact(event)">
+      <svg viewBox="0 0 24 24" fill="white" width="20" height="20"><path d="M17 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V7l-4-4zm2 16H5V5h11.2L19 7.8V19zm-7-7c-1.7 0-3 1.3-3 3s1.3 3 3 3 3-1.3 3-3-1.3-3-3-3zM6 6h9v4H6z"/></svg>
+      Save Contact
+    </a>
+    <button class="outline-share-btn" onclick="shareCard()">
+      <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18" style="display:inline-block;vertical-align:middle;margin-right:.4rem;"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92s2.92-1.31 2.92-2.92-1.31-2.92-2.92-2.92z"/></svg>
+      Share
+    </button>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="footer">
+    Get your own digital business card at <a href="https://tesographics.com" target="_blank" style="color:#142a4d;font-weight:600;">Tesographics.com</a>
+  </div>
+
+</div>
+<script>
+  // Slider
+  let current = 0;
+  const slides = document.querySelectorAll('.slide');
+  const dots = document.querySelectorAll('.dot');
+
+  function goTo(n) {
+    slides[current].classList.remove('active');
+    dots[current].classList.remove('active');
+    current = n;
+    slides[current].classList.add('active');
+    dots[current].classList.add('active');
+  }
+
+  setInterval(() => goTo((current + 1) % slides.length), 4000);
+
+  // Share
+  function shareCard() {
+    const url = window.location.href;
+    if (navigator.share) {
+      navigator.share({ title: "Nana's Cleaning Service – Isis Noriega", url });
+    } else {
+      navigator.clipboard.writeText(url).then(() => {
+        const t = document.getElementById('toast');
+        t.classList.add('show');
+        setTimeout(() => t.classList.remove('show'), 2500);
+      });
+    }
+  }
+
+  // Save Contact
+  function saveContact(e) {
+    e.preventDefault();
+    const vcard = [
+      'BEGIN:VCARD','VERSION:3.0','FN:Isis Noriega','ORG:Nana\'s Cleaning Service LLC',
+      'TITLE:Supervisor','TEL;TYPE=CELL:+15054898050',
+      'EMAIL:isis@nanasclean.com',
+      'NOTE:Commercial & Residential Cleaning - Greeley, Colorado - nanasclean.com',
+      'END:VCARD'
+    ].join('\n');
+    const blob = new Blob([vcard], { type: 'text/vcard' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'isis-noriega-nanas-cleaning.vcf';
+    a.click();
+  }
+</script>
+</body>
+</html>
